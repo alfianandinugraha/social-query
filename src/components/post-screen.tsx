@@ -1,5 +1,6 @@
 import { useGetAllPostQuery, useStorePostMutation } from "@/store/api/postApi";
-import { useMemo } from "react";
+import { MutationActionCreatorResult } from "@reduxjs/toolkit/dist/query/core/buildInitiate";
+import { useMemo, useRef } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 
 const PostScreen = () => {
@@ -8,6 +9,8 @@ const PostScreen = () => {
     isFetching: isPostsFetching,
     refetch: refetchGetAllPost,
   } = useGetAllPostQuery();
+
+  const mutationRef = useRef<MutationActionCreatorResult<any> | null>(null);
 
   const [storePost, { isLoading: isStorePostLoading }] = useStorePostMutation();
 
@@ -25,11 +28,17 @@ const PostScreen = () => {
           Refetch
         </Button>
         <Button
-          variant="primary"
+          variant={isStorePostLoading ? "danger" : "primary"}
           className="mb-3 ms-2"
-          disabled={isStorePostLoading}
+          disabled={isPostsFetching}
           onClick={() => {
-            storePost({
+            if (isStorePostLoading) {
+              mutationRef.current?.abort();
+              mutationRef.current = null;
+              return;
+            }
+
+            mutationRef.current = storePost({
               id: 1,
               title: "Hello World",
               body: "Heyyy",
@@ -37,7 +46,7 @@ const PostScreen = () => {
             });
           }}
         >
-          Store
+          {isStorePostLoading ? "Cancel" : "Store"}
         </Button>
       </div>
       {isPostsFetching && <p>Memuat post...</p>}
