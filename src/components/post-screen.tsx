@@ -1,7 +1,9 @@
 import { useGetAllPostQuery, useStorePostMutation } from "@/store/api/postApi";
+import userApi from "@/store/api/userApi";
 import { MutationActionCreatorResult } from "@reduxjs/toolkit/dist/query/core/buildInitiate";
 import { useMemo, useRef } from "react";
 import { Button, ListGroup } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 
 const PostScreen = () => {
   const {
@@ -13,6 +15,8 @@ const PostScreen = () => {
   const mutationRef = useRef<MutationActionCreatorResult<any> | null>(null);
 
   const [storePost, { isLoading: isStorePostLoading }] = useStorePostMutation();
+
+  const dispatch = useDispatch();
 
   const listPosts = useMemo(() => {
     const result = [...posts];
@@ -47,6 +51,22 @@ const PostScreen = () => {
           }}
         >
           {isStorePostLoading ? "Cancel" : "Store"}
+        </Button>
+        <Button
+          variant="primary"
+          className="mb-3 ms-2"
+          onClick={() => {
+            dispatch(
+              userApi.util.invalidateTags([
+                {
+                  type: "Users",
+                  id: "LIST",
+                },
+              ])
+            );
+          }}
+        >
+          Refetch Users
         </Button>
       </div>
       {isPostsFetching && <p>Memuat post...</p>}
