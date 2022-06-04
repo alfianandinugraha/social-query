@@ -5,6 +5,9 @@ const store = configureStore({
   reducer: {
     [postApi.reducerPath]: postApi.reducer,
   },
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware().concat(postApi.middleware);
+  },
 });
 
 export default store;
