@@ -1,6 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap";
 import PostScreen from "./components/post-screen";
-import { useGetAllPostQuery } from "./store/api/postApi";
+import UserScreen from "./components/user-screen";
 
 function App() {
   return (
@@ -8,6 +8,9 @@ function App() {
       <Row>
         <Col xl={6}>
           <PostScreen />
+        </Col>
+        <Col xl={6}>
+          <UserScreen />
         </Col>
       </Row>
     </Container>

@@ -3,7 +3,7 @@ import { Post } from "model";
 
 const postApi = createApi({
   reducerPath: "post",
-  tagTypes: ["Posts"],
+  tagTypes: ["Users"],
   baseQuery: fetchBaseQuery({
     baseUrl: "http://jsonplaceholder.typicode.com/",
   }),
@@ -11,7 +11,7 @@ const postApi = createApi({
     return {
       getAllPost: builder.query<Post[], void>({
         query: () => "posts",
-        providesTags: [{ type: "Posts", id: "LIST" }],
+        providesTags: [{ type: "Users", id: "LIST" }],
       }),
       storePost: builder.mutation<void, Post>({
         query: (body) => {
@@ -23,7 +23,7 @@ const postApi = createApi({
         },
         invalidatesTags: [
           {
-            type: "Posts",
+            type: "Users",
             id: "LIST",
           },
         ],
