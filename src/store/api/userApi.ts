@@ -1,17 +1,12 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Post, User } from "model";
+import { User } from "model";
+import baseApi from "./baseApi";
 
-const userApi = createApi({
-  reducerPath: "user",
-  tagTypes: ["Users"],
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://jsonplaceholder.typicode.com/",
-  }),
+const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => {
     return {
       getAllUser: builder.query<User[], void>({
         query: () => "users",
-        providesTags: [{ type: "Users", id: "LIST" }],
+        providesTags: [{ type: "User", id: "LIST" }],
       }),
     };
   },

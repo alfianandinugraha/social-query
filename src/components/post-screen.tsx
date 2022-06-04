@@ -59,7 +59,7 @@ const PostScreen = () => {
             dispatch(
               userApi.util.invalidateTags([
                 {
-                  type: "Users",
+                  type: "User",
                   id: "LIST",
                 },
               ])
