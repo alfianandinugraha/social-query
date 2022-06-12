@@ -1,7 +1,7 @@
 import { useGetAllPostQuery, useStorePostMutation } from "@/store/api/postApi";
 import userApi from "@/store/api/userApi";
 import { MutationActionCreatorResult } from "@reduxjs/toolkit/dist/query/core/buildInitiate";
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 
@@ -10,20 +10,17 @@ const PostScreen = () => {
     data: posts = [],
     isFetching: isPostsFetching,
     refetch: refetchGetAllPost,
-  } = useGetAllPostQuery();
+  } = useGetAllPostQuery({
+    param: {
+      limit: 7,
+    },
+  });
 
   const mutationRef = useRef<MutationActionCreatorResult<any> | null>(null);
 
   const [storePost, { isLoading: isStorePostLoading }] = useStorePostMutation();
 
   const dispatch = useDispatch();
-
-  const listPosts = useMemo(() => {
-    const result = [...posts];
-    result.splice(5, posts.length);
-
-    return result;
-  }, [posts]);
 
   return (
     <div>
@@ -72,7 +69,7 @@ const PostScreen = () => {
       {isPostsFetching && <p>Memuat post...</p>}
       {!isPostsFetching && (
         <ListGroup>
-          {listPosts.map((post) => {
+          {posts.map((post) => {
             return (
               <ListGroup.Item key={post.id}>
                 <h4>{post.title}</h4>

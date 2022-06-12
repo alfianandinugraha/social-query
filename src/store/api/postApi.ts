@@ -1,11 +1,32 @@
 import { Post } from "model";
 import baseApi from "./baseApi";
 
+type GetAllPostParam = {
+  limit?: number;
+};
+
+type GetAllPostPayload = {
+  param?: GetAllPostParam;
+};
+
 const postApi = baseApi.injectEndpoints({
   endpoints: (builder) => {
     return {
-      getAllPost: builder.query<Post[], void>({
-        query: () => "posts",
+      getAllPost: builder.query<Post[], GetAllPostPayload | void>({
+        query: (arg) => {
+          if (!arg) {
+            return {
+              url: "posts",
+            };
+          }
+
+          return {
+            url: "posts",
+            params: {
+              _limit: arg.param?.limit,
+            },
+          };
+        },
         providesTags: [{ type: "Post", id: "LIST" }],
       }),
       storePost: builder.mutation<void, Post>({
